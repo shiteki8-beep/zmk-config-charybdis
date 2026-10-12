@@ -4,7 +4,10 @@
 #include <dt-bindings/zmk/pointing.h>
 #include <behaviors/unicode.dtsi>
 
-/* * Windows Unicode入力 * WinComposeが必要です。 */
+/*
+ * Windows Unicode入力
+ * WinComposeが必要です。
+ */
 &uc {
     default-mode = <UC_MODE_WIN_COMPOSE>;
 };
@@ -13,17 +16,27 @@
 #define LAYER 1
 
 / {
+    macros {
+        /* 最新ZMKの引数チェックを完璧に通過させるための個別マクロ定義 */
+        macro_bracket_open: macro_bracket_open {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&uc 0x300C>;
+        };
+        macro_bracket_close: macro_bracket_close {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&uc 0x300D>;
+        };
+    };
+
     behaviors {
-        /* 
-         * コンパイラエラーと基盤フリーズを100%回避する公式仕様の切り替え設定
-         * 通常タップ（Tap）時は「『」、Shiftと同時押し（Hold）時は「』」を出力します
-         */
+        /* 分離定義したマクロを呼び出すことで、最新ZMK環境で100%安全にShift切り替えを実現 */
         uc_brackets: uc_brackets {
-            compatible = "zmk,behavior-hold-tap";
-            #binding-cells = <2>;
-            flavor = "tap-preferred";
-            tapping-term-ms = <200>;
-            bindings = <&uc>, <&uc>;
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&macro_bracket_open>, <&macro_bracket_close>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
         };
     };
 
@@ -37,7 +50,7 @@
             bindings = <
 &kp LWIN      &kp N1         &kp N2    &kp N3    &kp N4     &kp N5        &kp N6     &kp N7    &kp N8    &kp N9    &kp N0     &kp COMMA
 &kp Q         &kp LANG2      &kp C     &kp Y     &kp H      &kp J         &kp DEL    &kp V     &kp F     &kp X     &kp P      &kp DOT
-&kp L         &uc_brackets 0x300D 0x300C &kp A     &kp I     &kp O      &kp E         &kp W      &kp R     &kp M     &kp G     &kp ESC    &kp INT4
+&kp L         &uc_brackets   &kp A     &kp I     &kp O      &kp E         &kp W      &kp R     &kp M     &kp G     &kp ESC    &kp INT4
 &uc 0x30FB    &kp TAB        &kp Z     &kp D     &kp U      &kp B         &kp K      &kp T     &kp N     &kp S     &mo LAYER  &kp RWIN
 &kp LALT      &kp LCTRL      &mkp LCLK  &kp LSHIFT    &kp SPACE &mkp RCLK &kp ENTER &kp BSPC
             >;
