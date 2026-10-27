@@ -1,70 +1,19 @@
-/* * Copyright (c) 2026 The ZMK Contributors * SPDX-License-Identifier: MIT */
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/pointing.h>
-//#include <behaviors/unicode.dtsi>
-
-/*
- * Windows Unicode入力
- * WinComposeが必要です。
- */
 
 #define BASE 0
-#define LAYER 1
 
 / {
-    macros {
-        /* 最新ZMKの引数チェックを完璧に通過させるための個別マクロ定義 */
-        macro_bracket_open: macro_bracket_open {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&uc 0x300C>;
-        };
-        macro_bracket_close: macro_bracket_close {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&uc 0x300D>;
-        };
-    };
-
-    behaviors {
-        /* 分離定義したマクロを呼び出すことで、最新ZMK環境で100%安全にShift切り替えを実現 */
-        uc_brackets: uc_brackets {
-            compatible = "zmk,behavior-mod-morph";
-            #binding-cells = <0>;
-            bindings = <&macro_bracket_open>, <&macro_bracket_close>;
-            mods = <(MOD_LSFT|MOD_RSFT)>;
-        };
-    };
-
     keymap {
         compatible = "zmk,keymap";
-        // =========================================================
-        // 0 : 表レイヤー
-        // =========================================================
-        default_layer {
-            display-name = "BASE";
-            bindings = <
-&kp LWIN      &kp N1         &kp N2    &kp N3    &kp N4     &kp N5        &kp N6     &kp N7    &kp N8    &kp N9    &kp N0     &kp COMMA
-&kp Q         &kp LANG2      &kp C     &kp Y     &kp H      &kp J         &kp DEL    &kp V     &kp F     &kp X     &kp P      &kp DOT
-&kp L         &uc_brackets   &kp A     &kp I     &kp O      &kp E         &kp W      &kp R     &kp M     &kp G     &kp ESC    &kp INT4
-&uc 0x30FB    &kp TAB        &kp Z     &kp D     &kp U      &kp B         &kp K      &kp T     &kp N     &kp S     &mo LAYER  &kp RWIN
-&kp LALT      &kp LCTRL      &mkp LCLK  &kp LSHIFT    &kp SPACE &mkp RCLK &kp ENTER &kp BSPC
-            >;
-            trackball-bindings = <&tmv_coarse>;
-        };
 
-        // =========================================================
-        // 1 : レイヤー
-        // =========================================================
-        raise_layer {
-            display-name = "LAYER";
+        default_layer {
             bindings = <
-&kp LWIN      &kp F1         &kp F2        &kp F3        &kp F4        &kp F5          &kp F6       &kp F7    &kp F8    &kp F9     &kp F10   &kp F11
-&uc 0x2605    &uc 0x2103     &uc 0x1F90D   &uc 0x2194    &uc 0x2026    &uc 0x25CB      &kp PERCENT  &uc 0x203B &uc 0xFFE5 &kp MINUS &kp UNDER &kp F12
-&uc 0x300C    &uc 0x300D     &uc 0x1F308   &uc 0x1F628   &uc 0x1F603   &uc 0x1F64F      &kp EQUAL    &uc 0x00D7 &kp UP    &kp PLUS   &kp SLASH &kp AT
-&kp COLON     &kp TILDE      &kp SQT       &kp DQT       &kp HASH      &kp EXCL        &kp AMPS     &kp LEFT  &kp DOWN  &kp RIGHT  &trans    &kp RWIN
-&kp LALT      &kp LCTRL      &mkp LCLK     &kp LSHIFT      &kp SPACE &mkp RCLK     &kp ENTER     &kp BSPC
+                &kp Q &kp W &kp E &kp R &kp T     &kp Y &kp U &kp I &kp O &kp P
+                &kp A &kp S &kp D &kp F &kp G     &kp H &kp J &kp K &kp L &kp SEMI
+                &kp Z &kp X &kp C &kp V &kp B     &kp N &kp M &kp COMMA &kp DOT &kp FSLH
+                &kp LALT &kp LGUI &kp SPACE         &kp RET &kp BKSP
             >;
         };
     };
